@@ -2,17 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../style.dart';
 import 'package:intl/intl.dart';
+import '../views/task_page.dart';
 
 class TaskCard extends StatelessWidget{
   
   TaskCard({@required this.document}); //title, this.duedate, this.type, this.createtime});
 
   final document;
-
-  // final title;
-  // final duedate;
-  // final type;
-  // final createtime;
 
   Map<int, dynamic> colors = {1: Colors.blue, 2: Colors.purple, 3: Colors.indigo};
   Map<int, dynamic> icons = {1: Icons.home, 2: Icons.school, 3: Icons.work};
@@ -24,7 +20,7 @@ class TaskCard extends StatelessWidget{
 
     return Dismissible(
       key: Key(id),
-      child: buildCard(),
+      child: buildCard(context),
 
       onDismissed: (direction) async {
         if(direction == DismissDirection.startToEnd) {
@@ -35,20 +31,20 @@ class TaskCard extends StatelessWidget{
                content: Text("${document['title']} Deleted"),
                action: SnackBarAction(
                  label: "Undo",
-                 onPressed: () {}//handleUndoDelete(todo); },
+                 onPressed: () { _handleUndoDelete(document); },
                ),
              )
            );
          
           } else {
-            //_handleComplete(todo);
+            _handleComplete(document);
 
             Scaffold.of(context).showSnackBar(
              SnackBar(
                content: Text("${document['title']} Completed"),
                action: SnackBarAction(
                  label: "Undo",
-                 onPressed: () {}//_handleUndoComplete(todo); },
+                 onPressed: () {_handleUndoComplete(document); },
                ),)
            );  
           }
@@ -81,7 +77,7 @@ class TaskCard extends StatelessWidget{
 
   }
 
-  Widget buildCard(){
+  Widget buildCard(BuildContext context){
     return Card(
         color: colors[this.document['type']],
         elevation: 8.0,
@@ -93,7 +89,11 @@ class TaskCard extends StatelessWidget{
           child: 
             ListTile(
 
-              onTap: () => print(document.documentID),
+              onTap: () { 
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => TaskPage(document: document,)
+                ));
+                },
               contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
 
               leading: Container(
@@ -166,5 +166,29 @@ class TaskCard extends StatelessWidget{
   _handleDelete(String id){
     print("delete");
     Firestore.instance.collection('tasks').document(id).delete();
+  }
+
+  _handleUndoDelete(DocumentSnapshot document){
+    print("undo delete");
+    Firestore.instance.collection('tasks').add(document.data);
+  }
+
+  _handleComplete(DocumentSnapshot document) {
+    print("compelete");
+    Map<String, dynamic> updated_task = {"title": document['title'], "detail": document['detail'], "create_time": document['create_time'],
+    "due_date": document['due_date'], "type": document['type'], "status": 1, "finished_time": Timestamp.now()};
+
+    Firestore.instance.collection('tasks').document(document.documentID).updateData(updated_task);
+  }
+
+  _handleUndoComplete(DocumentSnapshot document) {
+
+    print("undo complete");
+
+    Map<String, dynamic> updated_task = {"title": document['title'], "detail": document['detail'], "create_time": document['create_time'],
+    "due_date": document['due_date'], "type": document['type'], "status": 0};
+
+    Firestore.instance.collection('tasks').document(document.documentID).updateData(updated_task);
+
   }
 }

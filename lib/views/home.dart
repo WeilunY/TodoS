@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: EdgeInsets.all(10.0),
           child: StreamBuilder<QuerySnapshot> (
 
-            stream: Firestore.instance.collection('tasks').orderBy('create_time', descending: true).snapshots(),
+            stream: Firestore.instance.collection('tasks').where('status', isEqualTo: 0).orderBy('create_time', descending: true).snapshots(),
             builder: (context, snapshot) {
               
               // error

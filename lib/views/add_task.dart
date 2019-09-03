@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Map<int, String> values = {1: "Home", 2: "Work", 3: "School"};
+Map<int, String> values = {1: "Home", 2: "School", 3: "Work"};
 
 class AddTaskPage extends StatefulWidget {
 
@@ -160,13 +160,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   "status": 0,
                   "type": _type,
 
-              })
-              .then((result) => {
-                Navigator.pop(context),
-                taskTitleInputController.clear(),
-                taskDetailInputController.clear(),
-              })
-              .catchError((err) => print(err));
+              }).catchError((err) => print(err));
+              //.then((result) => {
+                Navigator.pop(context);
+                taskTitleInputController.clear();
+                taskDetailInputController.clear();
+              //})
+             
           }
         })
        ],
