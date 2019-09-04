@@ -6,9 +6,10 @@ import '../views/task_page.dart';
 
 class TaskCard extends StatelessWidget{
   
-  TaskCard({@required this.document}); //title, this.duedate, this.type, this.createtime});
+  TaskCard({@required this.document, this.uid}); //title, this.duedate, this.type, this.createtime});
 
   final document;
+  final uid;
 
   Map<int, dynamic> colors = {1: Colors.blue, 2: Colors.purple, 3: Colors.indigo};
   Map<int, dynamic> icons = {1: Icons.home, 2: Icons.school, 3: Icons.work};
@@ -163,14 +164,15 @@ class TaskCard extends StatelessWidget{
 
   }
 
+
   _handleDelete(String id){
     print("delete");
-    Firestore.instance.collection('tasks').document(id).delete();
+    Firestore.instance.collection("users").document(uid).collection('tasks').document(id).delete();
   }
 
   _handleUndoDelete(DocumentSnapshot document){
     print("undo delete");
-    Firestore.instance.collection('tasks').add(document.data);
+    Firestore.instance.collection("users").document(uid).collection('tasks').add(document.data);
   }
 
   _handleComplete(DocumentSnapshot document) {
@@ -178,7 +180,7 @@ class TaskCard extends StatelessWidget{
     Map<String, dynamic> updated_task = {"title": document['title'], "detail": document['detail'], "create_time": document['create_time'],
     "due_date": document['due_date'], "type": document['type'], "status": 1, "finished_time": Timestamp.now()};
 
-    Firestore.instance.collection('tasks').document(document.documentID).updateData(updated_task);
+    Firestore.instance.collection("users").document(uid).collection('tasks').document(document.documentID).updateData(updated_task);
   }
 
   _handleUndoComplete(DocumentSnapshot document) {
@@ -188,7 +190,7 @@ class TaskCard extends StatelessWidget{
     Map<String, dynamic> updated_task = {"title": document['title'], "detail": document['detail'], "create_time": document['create_time'],
     "due_date": document['due_date'], "type": document['type'], "status": 0};
 
-    Firestore.instance.collection('tasks').document(document.documentID).updateData(updated_task);
+    Firestore.instance.collection("users").document(uid).collection('tasks').document(document.documentID).updateData(updated_task);
 
   }
 }

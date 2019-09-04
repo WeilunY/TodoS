@@ -6,6 +6,10 @@ Map<int, String> values = {1: "Home", 2: "School", 3: "Work"};
 
 class AddTaskPage extends StatefulWidget {
 
+  AddTaskPage({@required this.uid});
+
+  final uid;
+
   @override
   _AddTaskPageState createState() => _AddTaskPageState();
 }
@@ -150,7 +154,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
           onPressed: () {
             if (taskDetailInputController.text.isNotEmpty &&
                 taskTitleInputController.text.isNotEmpty) {
-              Firestore.instance
+              Firestore.instance.collection("users")
+                .document(widget.uid)
                 .collection('tasks')
                 .add({
                   "title": taskTitleInputController.text,

@@ -1,26 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../components/task_card.dart';
 import './add_task.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title, this.uid}) : super(key: key);
 
   final String title;
+  final String uid;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  
   
   @override
   Widget build(BuildContext context) {
+
+    var db = Firestore.instance.collection("users").document(widget.uid).collection('tasks');
 
     return Scaffold(
 
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Log Out"),
+            textColor: Colors.white,
+            onPressed: () {
+              FirebaseAuth.instance
+                  .signOut()
+                  .then((result) =>
+                      Navigator.pushReplacementNamed(context, "/login"))
+                  .catchError((err) => print(err));
+            },
+          )
+        ],
       ),
 
       body: Center(
@@ -28,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: EdgeInsets.all(10.0),
           child: StreamBuilder<QuerySnapshot> (
 
-            stream: Firestore.instance.collection('tasks').where('status', isEqualTo: 0).orderBy('create_time', descending: true).snapshots(),
+            stream: db.where('status', isEqualTo: 0).orderBy('create_time', descending: true).snapshots(),
             builder: (context, snapshot) {
               
               // error
@@ -48,6 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       (DocumentSnapshot document) {
                         return new TaskCard(
                           document: document, 
+                          uid: widget.uid,
                         );
                       }
                     ).toList(),
@@ -61,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
        floatingActionButton: FloatingActionButton(
         onPressed: (){
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => AddTaskPage())
+            MaterialPageRoute(builder: (context) => AddTaskPage(uid: widget.uid,))
           );
         },//_showDialog,
         tooltip: 'Add',
