@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import '../style.dart';
 import 'package:intl/intl.dart';
 import '../views/task_page.dart';
+import '../model/task.dart';
 
 class TaskCard extends StatelessWidget{
   
   TaskCard({@required this.document, this.uid}); //title, this.duedate, this.type, this.createtime});
 
-  final document;
+  Task document;
   final uid;
 
   Map<int, dynamic> colors = {1: Colors.blue, 2: Colors.purple, 3: Colors.indigo};
@@ -17,7 +18,7 @@ class TaskCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    String id = document.documentID;
+    String id = document.id;
 
     return Dismissible(
       key: Key(id),
@@ -29,7 +30,7 @@ class TaskCard extends StatelessWidget{
 
            Scaffold.of(context).showSnackBar(
              SnackBar(
-               content: Text("${document['title']} Deleted"),
+               content: Text("${document.title} Deleted"),
                action: SnackBarAction(
                  label: "Undo",
                  onPressed: () { _handleUndoDelete(document); },
@@ -42,7 +43,7 @@ class TaskCard extends StatelessWidget{
 
             Scaffold.of(context).showSnackBar(
              SnackBar(
-               content: Text("${document['title']} Completed"),
+               content: Text("${document.title} Completed"),
                action: SnackBarAction(
                  label: "Undo",
                  onPressed: () {_handleUndoComplete(document); },
@@ -80,7 +81,7 @@ class TaskCard extends StatelessWidget{
 
   Widget buildCard(BuildContext context){
     return Card(
-        color: colors[this.document['type']],
+        color: colors[this.document.type],
         elevation: 8.0,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(14.0))),
         margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
@@ -105,10 +106,10 @@ class TaskCard extends StatelessWidget{
                   )
                 ),
 
-                child: Icon(icons[this.document['type']], color: Colors.white,),
+                child: Icon(icons[this.document.type], color: Colors.white,),
                 ),
 
-              title: Text(this.document['title'] ?? "", style: cardTitle,),
+              title: Text(this.document.title ?? "", style: cardTitle,),
 
               subtitle: Container(
                 margin: EdgeInsets.only(top: 8.0),
@@ -117,10 +118,9 @@ class TaskCard extends StatelessWidget{
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.only(bottom: 6.0),     
-                    child: Text(this.document['due_date'] != null ? "Due ${formatDate(this.document['due_date'])}" : "No due date", 
-                          style: cardDue),
+                    child: Text(this.document.dueDate != null ? "Due ${formatDate(this.document.dueDate)}" : "No due date", style: cardDue),
                   ),           
-                  Text("Created ${formatDate(this.document['create_time'])}", 
+                  Text("Created ${formatDate(this.document.createTime)}", 
                         style: cardCreate),
                 ],
                ),
@@ -164,33 +164,32 @@ class TaskCard extends StatelessWidget{
 
   }
 
-
   _handleDelete(String id){
     print("delete");
     Firestore.instance.collection("users").document(uid).collection('tasks').document(id).delete();
   }
 
-  _handleUndoDelete(DocumentSnapshot document){
+  _handleUndoDelete(Task document){
     print("undo delete");
-    Firestore.instance.collection("users").document(uid).collection('tasks').add(document.data);
+    Firestore.instance.collection("users").document(uid).collection('tasks').add(document.toJson());
   }
 
-  _handleComplete(DocumentSnapshot document) {
+  _handleComplete(Task document) {
     print("compelete");
-    Map<String, dynamic> updated_task = {"title": document['title'], "detail": document['detail'], "create_time": document['create_time'],
-    "due_date": document['due_date'], "type": document['type'], "status": 1, "finished_time": Timestamp.now()};
+    document.status = 1;
+    document.finishedTime = Timestamp.now();
 
-    Firestore.instance.collection("users").document(uid).collection('tasks').document(document.documentID).updateData(updated_task);
+    Firestore.instance.collection("users").document(uid).collection('tasks').document(document.id).updateData(document.toJson());
   }
 
-  _handleUndoComplete(DocumentSnapshot document) {
+  _handleUndoComplete(Task document) {
 
     print("undo complete");
 
-    Map<String, dynamic> updated_task = {"title": document['title'], "detail": document['detail'], "create_time": document['create_time'],
-    "due_date": document['due_date'], "type": document['type'], "status": 0};
+    document.status = 0;
+    document.finishedTime = null;
 
-    Firestore.instance.collection("users").document(uid).collection('tasks').document(document.documentID).updateData(updated_task);
+    Firestore.instance.collection("users").document(uid).collection('tasks').document(document.id).updateData(document.toJson());
 
   }
 }

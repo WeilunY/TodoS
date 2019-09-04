@@ -28,7 +28,7 @@ packages:
       name: cloud_firestore
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.12.9+2"
+    version: "0.12.9+3"
   collection:
     dependency: transitive
     description:

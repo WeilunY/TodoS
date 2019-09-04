@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../components/task_card.dart';
 import './add_task.dart';
+import '../model/task.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title, this.uid}) : super(key: key);
@@ -65,8 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   return new ListView(
                     children: snapshot.data.documents.map(
                       (DocumentSnapshot document) {
+                        var task = Task.fromJson(document);
                         return new TaskCard(
-                          document: document, 
+                          document: task, 
                           uid: widget.uid,
                         );
                       }

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:todo_nav/model/task.dart';
 
 class TaskPage extends StatelessWidget {
 
   TaskPage({@required this.document});
 
-  final document;
+  Task document;
 
   @override
   Widget build(BuildContext context){
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${this.document['title']}"),
+        title: Text("${this.document.title}"),
       ),
 
       body: Container(
@@ -31,7 +32,7 @@ class TaskPage extends StatelessWidget {
         children: <Widget>[
           Text("Details:"),
 
-          Text("${this.document['detail']}")
+          Text("${this.document.detail}")
         ],
       ),
     );

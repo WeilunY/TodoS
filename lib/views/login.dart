@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import './home.dart';
+import '../model/user.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -72,39 +73,45 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text("Login"),
                     color: Theme.of(context).primaryColor,
                     textColor: Colors.white,
-                    onPressed: () {
-                      print("login");
-                      if (_loginFormKey.currentState.validate()) {
-                        FirebaseAuth.instance
-                            .signInWithEmailAndPassword(
-                                email: emailInputController.text,
-                                password: pwdInputController.text)
-                            .then((currentUser) => Firestore.instance
-                                .collection("users")
-                                .document(currentUser.user.uid)
-                                .get()
-                                .then((DocumentSnapshot result) =>
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MyHomePage(
-                                                  title: "${result["fname"]}'s Tasks",
-                                                  uid: currentUser.user.uid,
-                                                ))))
-                                .catchError((err) => print(err)))
-                            .catchError((err) => print(err));
-                      }
-                    },
+                    onPressed: () => _login(),
                   ),
                   Text("Don't have an account yet?"),
                   FlatButton(
                     child: Text("Register here!"),
                     onPressed: () {
                       Navigator.pushNamed(context, "/register");
-                    },
-                  )
-                ],
-              ),
-      ))));
+                  },
+                )
+              ],
+            ),
+          )
+        )
+      )
+    );
+  }
+
+  void _login(){
+    if (_loginFormKey.currentState.validate()) {
+      
+      FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: emailInputController.text,
+              password: pwdInputController.text)
+              
+          .then((currentUser) => Firestore.instance
+              .collection("users")
+              .document(currentUser.user.uid)
+              .get()
+              .then((DocumentSnapshot result) =>
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyHomePage(
+                                title: "${result["fname"]}'s Tasks",
+                                uid: currentUser.user.uid,
+                              ))))
+              .catchError((err) => print(err)))
+          .catchError((err) => print(err));
+    }
   }
 }
