@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:todo_nav/views/navigation.dart';
 import './home.dart';
 import '../model/user.dart';
 
@@ -106,9 +107,8 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MyHomePage(
-                                title: "${result["fname"]}'s Tasks",
-                                uid: currentUser.user.uid,
+                          builder: (context) => Navigation(
+                                user: User.fromJson(result)
                               ))))
               .catchError((err) => print(err)))
           .catchError((err) => print(err));

@@ -44,7 +44,7 @@ class _HistoryState extends State<History> {
               switch(snapshot.connectionState){
                 case ConnectionState.waiting:
                   return new Center(
-                    child: CircularProgressIndicator(),
+                    child: Text("Empty"),
                   );
 
                 default:

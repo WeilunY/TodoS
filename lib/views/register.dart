@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:todo_nav/model/user.dart';
+import 'package:todo_nav/views/login.dart';
+import 'package:todo_nav/views/navigation.dart';
 import './home.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -183,9 +186,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MyHomePage(
-                                    title: "${firstNameInputController.text}'s Tasks",
-                                    uid: currentUser.user.uid,
+                              builder: (context) => LoginPage(
+                                   
                                   )),
                           (_) => false),
                       firstNameInputController.clear(),
