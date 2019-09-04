@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:todo_nav/style.dart';
 import '../components/task_card.dart';
 import './add_task.dart';
 import '../model/task.dart';
@@ -17,8 +18,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  
-  
   @override
   Widget build(BuildContext context) {
 
@@ -26,21 +25,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
 
+      backgroundColor: backColor,
       appBar: AppBar(
+        //backgroundColor: Colors.deepPurple[800],
         title: Text(widget.title),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Log Out"),
-            textColor: Colors.white,
-            onPressed: () {
-              FirebaseAuth.instance
-                  .signOut()
-                  .then((result) =>
-                      Navigator.pushReplacementNamed(context, "/login"))
-                  .catchError((err) => print(err));
-            },
-          )
-        ],
+        
+        
       ),
 
       body: Center(
@@ -81,6 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
        floatingActionButton: FloatingActionButton(
+         elevation: 8.0,
+        backgroundColor: Colors.cyan[400],
         onPressed: (){
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => AddTaskPage(uid: widget.uid,))

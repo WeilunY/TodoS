@@ -12,7 +12,7 @@ class TaskCard extends StatelessWidget{
   Task document;
   final uid;
 
-  Map<int, dynamic> colors = {1: Colors.blue, 2: Colors.purple, 3: Colors.indigo};
+  Map<int, dynamic> colors = {1: Colors.blue[600], 2: Colors.purple, 3: Colors.indigo};
   Map<int, dynamic> icons = {1: Icons.home, 2: Icons.school, 3: Icons.work};
 
   @override
@@ -54,7 +54,7 @@ class TaskCard extends StatelessWidget{
 
       background: Container(
         padding: EdgeInsets.only(left: 16.0),
-        color: Colors.red[800],
+        color: Colors.pink[500],
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +66,7 @@ class TaskCard extends StatelessWidget{
 
       secondaryBackground: Container(
         padding: EdgeInsets.only(right: 16.0),
-        color: Colors.green[800],
+        color: Colors.teal[500],
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,

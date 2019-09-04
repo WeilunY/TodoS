@@ -4,6 +4,7 @@ import './views/task_page.dart';
 import './views/login.dart';
 import './views/register.dart';
 import './views/splash.dart';
+import 'style.dart';
 
 
 void main() => runApp(MyApp());
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: bottomBarColor,
+       
       ),
       //home: MyHomePage(title: 'Home'),
       home: SplashPage(),

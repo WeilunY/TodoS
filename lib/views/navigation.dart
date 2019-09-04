@@ -5,6 +5,7 @@ import 'package:todo_nav/views/home.dart';
 import 'history.dart';
 import 'profile.dart';
 import 'firends.dart';
+import '../style.dart';
 
 class Navigation extends StatefulWidget{
 
@@ -33,20 +34,22 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
  
   @override
   Widget build(BuildContext context){
+
+    var fname = widget.user.fname.toUpperCase();
     return Scaffold(
        body: TabBarView(
         controller: controller,
         children: <Widget>[
-          MyHomePage(title: "${widget.user.fname}'s Task", uid: widget.user.uid,),
-          History(title: "${widget.user.fname}'s History", uid: widget.user.uid,),
-          Friends(title: "${widget.user.fname}'s Friends", uid: widget.user.uid,),
-          Profile(title: "${widget.user.fname}'s Profile", uid: widget.user.uid,),
+          MyHomePage(title: "Tasks", uid: widget.user.uid,),
+          History(title: "History", uid: widget.user.uid,),
+          Friends(title: "Friends", uid: widget.user.uid,),
+          Profile(title: "Profile", uid: widget.user.uid,),
         ],
       ),
 
       // navigation bar
       bottomNavigationBar: new Material(
-        color: Color.fromRGBO(44, 50, 65, 1.0),
+        color: bottomBarColor,
         child: TabBar(
           controller: controller,
           tabs: <Tab>[

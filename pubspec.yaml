@@ -27,6 +27,7 @@ dependencies:
   firebase_auth: ^0.14.0+5
   firebase_core: ^0.4.0+8
   intl: ^0.16.0
+  flutter_slidable: ^0.5.3
 
 dev_dependencies:
   flutter_test:

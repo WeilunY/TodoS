@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_nav/style.dart';
 
 class Friends extends StatefulWidget {
 
@@ -17,6 +18,8 @@ class _FriendsState extends State<Friends> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: backColor,
+
       appBar: AppBar(
         title: Text(widget.title),
       ),
