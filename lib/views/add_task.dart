@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:todo_nav/style.dart';
 
 Map<int, String> values = {1: "Home", 2: "School", 3: "Work"};
 
@@ -34,6 +35,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: backColor,
       appBar: AppBar(
         title: Text("Create New Task"),
       ),
@@ -44,14 +46,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
           //mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             buildTitle(),
-            buildDetail(),
-            SizedBox(height: 20.0,),
-            datePicker(),
-            SizedBox(height: 10.0,),
+            buildDetail(),      
+            datePicker(),       
             radioPicker(),
-
-            buildButtons(),
-            
+            buildButtons(),          
           ],
         ),
       )
@@ -72,37 +70,64 @@ class _AddTaskPageState extends State<AddTaskPage> {
       });
   }
 
+  Map<int, dynamic> colors = {1: Colors.blue[700], 2: Colors.purple[600], 3: Colors.indigo[600]};
+
   // Date Picker
   Widget datePicker() {
-    return Row(
-      children: <Widget>[
 
-        RaisedButton(
-          onPressed: () => _selectDue(context),
-          child: Text('Select date'),
-        ),    
-        SizedBox(width: 20.0,),
-        Text(DateFormat("yyyy-MM-dd").format(dueDate)),
-        
-      ]
+    return Card(
+      shape: inputRadius,
+      color: colors[_type],
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 10.0, 0, 4.0),
+              child:  Text("Set Due: ", style: textStyle,),
+            ),
+            FlatButton(
+              color: colors[_type],
+              onPressed: () => _selectDue(context),
+              child: Text('${DateFormat("yyyy-MM-dd").format(dueDate)}', style: textStyle,),
+            ),    
+            
+          ]
+        )
+      )
     );
   }
 
   // radio picker
   Widget radioPicker() {
-    return Column(
-      children: <Widget>[
-        buildRadio(1),
-        buildRadio(2),
-        buildRadio(3),
-      ],
+
+    return Card(
+      shape: inputRadius,
+      color: colors[_type],
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 4.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.fromLTRB(14.0, 14.0, 0, 4.0),
+              child:  Text("Select Type: ", style: textStyle,),
+            ),   
+            buildRadio(1),
+            buildRadio(2),
+            buildRadio(3),
+          ],
+        )
+      )
     );
   }
 
   Widget buildRadio(int i){
     return ListTile(
-      title: Text('${values[i]}'),
+      title: Text('${values[i]}', style: textStyle,),
       leading: Radio(
+        activeColor: Colors.white,
         value: i,
         groupValue: _type,
         onChanged: (int value) {
@@ -118,39 +143,64 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
 
   Widget buildTitle(){
-    return Container(
-      child: TextField(
-        autofocus: true,
-        decoration: InputDecoration(labelText: 'Task Title*'),
-        controller: taskTitleInputController,
-      ),
+    return Card(
+      shape: inputRadius,
+      color: colors[_type],
+      elevation: 6.0,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
+        child: TextField(
+          autofocus: true,
+          style: textStyle,
+          cursorColor: Colors.white,
+          decoration: InputDecoration(labelText: 'Task Title*', labelStyle: textStyle,),
+          controller: taskTitleInputController,
+        ),
+      )
     );
   }
 
   Widget buildDetail() {
-    return Container(
-      child: TextField(
-        autofocus: true,
-        decoration: InputDecoration(labelText: 'Task Detail*'),
-        controller: taskDetailInputController,
-      ),
+    return Card(
+      shape: inputRadius,
+      color: colors[_type],
+      elevation: 6.0,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
+        child: TextField(
+          autofocus: true,
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
+          cursorColor: Colors.white,
+          style: textStyle,
+          decoration: InputDecoration(labelText: 'Task Detail*', labelStyle: textStyle),
+          controller: taskDetailInputController,
+        ),
+      )
     );
   }
 
   Widget buildButtons() {
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
        children: <Widget>[
          RaisedButton(
-          child: Text('Cancel'),
+          child: Text('Cancel', style: textStyle,),
+          color: Colors.pink[500],
           onPressed: () {
             taskTitleInputController.clear();
             taskDetailInputController.clear();
             Navigator.pop(context);
           }),
 
+        SizedBox(
+          width: 20.0,
+        ),
+
         RaisedButton(
-          child: Text('Add'),
+          child: Text('Add', style: textStyle,),
+          color: Colors.teal[500],
           onPressed: () {
             if (taskDetailInputController.text.isNotEmpty &&
                 taskTitleInputController.text.isNotEmpty) {

@@ -22,7 +22,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
 
   @override
   void initState() {
-    controller = new TabController(length: 4, vsync: this);
+    controller = new TabController(length: 3, vsync: this);
     super.initState();
   }
 
@@ -42,7 +42,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
         children: <Widget>[
           MyHomePage(title: "Tasks", uid: widget.user.uid,),
           History(title: "History", uid: widget.user.uid,),
-          Friends(title: "Friends", uid: widget.user.uid,),
+          //Friends(title: "Friends", uid: widget.user.uid,),
           Profile(title: "Profile", uid: widget.user.uid,),
         ],
       ),
@@ -55,7 +55,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
           tabs: <Tab>[
             Tab(text: "To-Dos", icon: new Icon(Icons.list)),
             Tab(text: "History", icon: new Icon(Icons.history)),
-            Tab(text: "Friends", icon: new Icon(Icons.people)),
+            //Tab(text: "Friends", icon: new Icon(Icons.people)),
             Tab(text: "Profile", icon: new Icon(Icons.person))
           ],
         ),

@@ -15,3 +15,5 @@ const backColor = Color.fromRGBO(58, 66, 86, 1.0);
 final complete = Colors.cyan[900];
 
 final incomplete = Colors.cyan[200];
+
+final inputRadius = const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0)));
