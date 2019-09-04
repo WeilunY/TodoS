@@ -43,7 +43,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
           MyHomePage(title: "Tasks", uid: widget.user.uid,),
           History(title: "History", uid: widget.user.uid,),
           //Friends(title: "Friends", uid: widget.user.uid,),
-          Profile(title: "Profile", uid: widget.user.uid,),
+          Profile(title: "Profile", user: widget.user,),
         ],
       ),
 
