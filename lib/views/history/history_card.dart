@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../style.dart';
+import '../../style.dart';
 import 'package:intl/intl.dart';
-import '../model/task.dart';
+import '../../model/task.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class HistoryCard extends StatelessWidget {

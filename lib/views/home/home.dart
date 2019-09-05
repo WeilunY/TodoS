@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:todo_nav/style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../model/task.dart';
-import '../components/history_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:todo_nav/style.dart';
+import './task_card.dart';
+import './add_task.dart';
+import '../../model/task.dart';
 
-class History extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title, this.uid}) : super(key: key);
 
-  History({@required this.title, this.uid});
-
-  final title;
-  final uid;
+  final String title;
+  final String uid;
 
   @override
-  _HistoryState createState() => new _HistoryState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _HistoryState extends State<History> {
+class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +24,13 @@ class _HistoryState extends State<History> {
     var db = Firestore.instance.collection("users").document(widget.uid).collection('tasks');
 
     return Scaffold(
+
       backgroundColor: backColor,
       appBar: AppBar(
+        //backgroundColor: Colors.deepPurple[800],
         title: Text(widget.title),
+        
+        
       ),
 
       body: Center(
@@ -33,7 +38,7 @@ class _HistoryState extends State<History> {
           padding: EdgeInsets.all(10.0),
           child: StreamBuilder<QuerySnapshot> (
 
-            stream: db.orderBy('create_time', descending: true).snapshots(),
+            stream: db.where('status', isEqualTo: 0).orderBy('create_time', descending: true).snapshots(),
             builder: (context, snapshot) {
               
               // error
@@ -52,8 +57,8 @@ class _HistoryState extends State<History> {
                     children: snapshot.data.documents.map(
                       (DocumentSnapshot document) {
                         var task = Task.fromJson(document);
-                        return new HistoryCard(
-                          todo: task, 
+                        return new TaskCard(
+                          document: task, 
                           uid: widget.uid,
                         );
                       }
@@ -62,8 +67,23 @@ class _HistoryState extends State<History> {
                 }
             },
           ),
-        )
+        ),
       ),
+
+       floatingActionButton: FloatingActionButton(
+        elevation: 8.0,
+        backgroundColor: Colors.cyan[400],
+        onPressed: (){
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => AddTaskPage(uid: widget.uid,))
+          );
+        },//_showDialog,
+        tooltip: 'Add',
+        child: Icon(Icons.add),
+      ),
+
     );
   }
+
+  // text editing
 }

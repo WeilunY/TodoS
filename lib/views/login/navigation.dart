@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:todo_nav/model/user.dart';
 import 'package:todo_nav/model/task.dart';
-import 'package:todo_nav/views/home.dart';
-import 'history.dart';
-import 'profile.dart';
-import 'firends.dart';
-import '../style.dart';
+import 'package:todo_nav/views/home/home.dart';
+import '../history/history.dart';
+import '../profile/profile.dart';
+import '../friends/firends.dart';
+import '../../style.dart';
+import '../home/camera.dart';
+import 'package:camera/camera.dart';
 
 class Navigation extends StatefulWidget{
 
   Navigation({@required this.user});
+
   User user;
 
   @override
@@ -22,7 +25,8 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
 
   @override
   void initState() {
-    controller = new TabController(length: 3, vsync: this);
+    
+    controller = new TabController(length: 4, vsync: this);
     super.initState();
   }
 
@@ -43,6 +47,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
           MyHomePage(title: "Tasks", uid: widget.user.uid,),
           History(title: "History", uid: widget.user.uid,),
           //Friends(title: "Friends", uid: widget.user.uid,),
+          CameraApp(),
           Profile(title: "Profile", user: widget.user,),
         ],
       ),
@@ -56,6 +61,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
             Tab(text: "To-Dos", icon: new Icon(Icons.list)),
             Tab(text: "History", icon: new Icon(Icons.history)),
             //Tab(text: "Friends", icon: new Icon(Icons.people)),
+            Tab(text: "Camera", icon: new Icon(Icons.camera),),
             Tab(text: "Profile", icon: new Icon(Icons.person))
           ],
         ),

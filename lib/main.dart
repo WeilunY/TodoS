@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
-import './views/home.dart';
-import './views/task_page.dart';
-import './views/login.dart';
-import './views/register.dart';
-import './views/splash.dart';
+import './views/home/home.dart';
+import './views/home/task_page.dart';
+import './views/login/login.dart';
+import './views/login/register.dart';
+import './views/login/splash.dart';
 import 'style.dart';
+import 'package:camera/camera.dart';
+import './views/home/camera.dart';
 
+List<CameraDescription> cameras;
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  cameras = await availableCameras();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
