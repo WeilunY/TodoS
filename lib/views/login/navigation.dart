@@ -46,8 +46,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
         children: <Widget>[
           MyHomePage(title: "Tasks", uid: widget.user.uid,),
           History(title: "History", uid: widget.user.uid,),
-          //Friends(title: "Friends", uid: widget.user.uid,),
-          CameraApp(),
+          Friends(title: "Friends", uid: widget.user.uid,),
           Profile(title: "Profile", user: widget.user,),
         ],
       ),
@@ -60,8 +59,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
           tabs: <Tab>[
             Tab(text: "To-Dos", icon: new Icon(Icons.list)),
             Tab(text: "History", icon: new Icon(Icons.history)),
-            //Tab(text: "Friends", icon: new Icon(Icons.people)),
-            Tab(text: "Camera", icon: new Icon(Icons.camera),),
+            Tab(text: "Friends", icon: new Icon(Icons.people)),
             Tab(text: "Profile", icon: new Icon(Icons.person))
           ],
         ),

@@ -6,7 +6,7 @@ import './views/login/register.dart';
 import './views/login/splash.dart';
 import 'style.dart';
 import 'package:camera/camera.dart';
-import './views/home/camera.dart';
+
 
 List<CameraDescription> cameras;
 

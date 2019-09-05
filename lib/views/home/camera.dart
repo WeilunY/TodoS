@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
 import './image_detail.dart';
 import '../../main.dart';
+import '../../style.dart';
 
 
 class CameraApp extends StatefulWidget {
@@ -13,18 +14,6 @@ class CameraApp extends StatefulWidget {
   _CameraAppState createState() => _CameraAppState();
 }
 
-/// Returns a suitable camera icon for [direction].
-IconData getCameraLensIcon(CameraLensDirection direction) {
-  switch (direction) {
-    case CameraLensDirection.back:
-      return Icons.camera_rear;
-    case CameraLensDirection.front:
-      return Icons.camera_front;
-    case CameraLensDirection.external:
-      return Icons.camera;
-  }
-  throw ArgumentError('Unknown lens direction');
-}
 
 void logError(String code, String message) =>
     print('Error: $code\nError Message: $message');
@@ -33,10 +22,21 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver{
 
   CameraController controller;
   String imagePath;
+
+  int cam = 0;
  
   @override
   void initState() {
     super.initState();
+    controller = CameraController(cameras[0], ResolutionPreset.medium);
+    controller.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        this.cam = 0;
+      });
+    });
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -66,43 +66,34 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver{
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: const Text('Camera example'),
-      ),
+      backgroundColor: Colors.black,
+      
       body: Column(
         children: <Widget>[
-          Expanded(
-            child: Container(
-              child: Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: Center(
-                  child: _cameraPreviewWidget(),
-                ),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                border: Border.all(
-                  color: controller != null && controller.value.isRecordingVideo
-                      ? Colors.redAccent
-                      : Colors.grey,
-                  width: 3.0,
-                ),
-              ),
-            ),
+           
+       
+          Container(
+            padding: EdgeInsets.only(top: 80.0),
+            child: _cameraPreviewWidget(),            
+            decoration: BoxDecoration(
+              color: Colors.black,
+             ),
           ),
-          _captureControlRowWidget(),
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                _cameraTogglesRowWidget(),
-                _thumbnailWidget(),
-              ],
-            ),
-          ),
+
+           SizedBox(height: 20.0,),
+         
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              back(),
+              _captureControlRowWidget(),
+              toogleDirection(),
+              //_thumbnailWidget(),
+            ],
+          ),       
         ],
       ),
+      
     );
   }
 
@@ -147,48 +138,51 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver{
 
   /// Display the control bar with buttons to take pictures and record videos.
   Widget _captureControlRowWidget() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.camera_alt),
-          color: Colors.blue,
-          onPressed: controller != null &&
-                  controller.value.isInitialized &&
-                  !controller.value.isRecordingVideo
-              ? onTakePictureButtonPressed
-              : null,
-        ),
-      ],
+       
+    return RaisedButton(
+      padding: EdgeInsets.all(20.0),
+      child: const Icon(Icons.camera_alt),
+      color: Colors.blue,
+      shape: CircleBorder(),
+      onPressed: controller != null &&
+              controller.value.isInitialized &&
+              !controller.value.isRecordingVideo
+          ? onTakePictureButtonPressed
+          : null,
     );
+     
   }
 
-  /// Display a row of toggle to select the camera (or a message if no camera is available).
-  Widget _cameraTogglesRowWidget() {
-    final List<Widget> toggles = <Widget>[];
+  Widget toogleDirection(){
+    int dir = this.cam == 0 ? 1 : 0;
+    return RaisedButton(
+      shape: CircleBorder(),
+      padding: EdgeInsets.all(18.0),
+      child: Icon(Icons.switch_camera,),
+      onPressed: () {
+        this.controller = CameraController(cameras[dir], ResolutionPreset.medium);
+        controller.initialize().then((_) {
+          if (!mounted) {
+            return;
+          }
+          setState(() {
+            this.cam = dir;
+          });
+        });
+      },
+    );
 
-    if (cameras.isEmpty) {
-      return const Text('No camera found');
-    } else {
-      for (CameraDescription cameraDescription in cameras) {
-        toggles.add(
-          SizedBox(
-            width: 90.0,
-            child: RadioListTile<CameraDescription>(
-              title: Icon(getCameraLensIcon(cameraDescription.lensDirection)),
-              groupValue: controller?.description,
-              value: cameraDescription,
-              onChanged: controller != null && controller.value.isRecordingVideo
-                  ? null
-                  : onNewCameraSelected,
-            ),
-          ),
-        );
-      }
-    }
+  }
 
-    return Row(children: toggles);
+  Widget back(){
+    return RaisedButton(
+      shape: CircleBorder(),
+      padding: EdgeInsets.all(18.0),
+      child: Icon(Icons.arrow_back,),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
   }
 
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();

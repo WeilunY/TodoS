@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todo_nav/style.dart';
+import './camera.dart';
 
 Map<int, String> values = {1: "Home", 2: "School", 3: "Work"};
 
@@ -46,7 +47,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
           //mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             buildTitle(),
-            buildDetail(),      
+            buildDetail(),
+            buildCamera(),      
             datePicker(),       
             radioPicker(),
             buildButtons(),          
@@ -136,6 +138,25 @@ class _AddTaskPageState extends State<AddTaskPage> {
           });
         },
       ),
+    );
+  }
+
+  Widget buildCamera(){
+    return Card(
+      shape: inputRadius,
+      color: colors[_type],
+      elevation: 6.0,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
+        child: RaisedButton(
+          child: Icon(Icons.camera),
+          onPressed:() { 
+              Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => CameraApp())
+            );
+          }
+        )    
+      )
     );
   }
   
