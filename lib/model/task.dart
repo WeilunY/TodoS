@@ -10,6 +10,7 @@ class Task {
     Timestamp finishedTime;
     int type;
     int status;
+    String image;
     
 
     Task({
@@ -21,6 +22,7 @@ class Task {
         this.status,
         this.finishedTime,
         this.id,
+        this.image,
     });
 
     factory Task.fromJson(DocumentSnapshot json) => new Task(
@@ -32,6 +34,7 @@ class Task {
         status: json["status"],
         finishedTime: json["finished_time"],
         id: json.documentID,
+        image: json["image"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -42,5 +45,6 @@ class Task {
         "type": type,
         "status": status,
         "finished_time": finishedTime,
+        "image": image,
     };
 }

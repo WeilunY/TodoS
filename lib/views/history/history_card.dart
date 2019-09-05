@@ -4,6 +4,7 @@ import '../../style.dart';
 import 'package:intl/intl.dart';
 import '../../model/task.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import './history_page.dart';
 
 class HistoryCard extends StatelessWidget {
 
@@ -12,6 +13,7 @@ class HistoryCard extends StatelessWidget {
   Task todo;
   final uid;
 
+  @override
   Widget build(BuildContext context){
 
   var icon = todo.status == 1 ? Icons.check_circle: Icons.cached;
@@ -88,6 +90,11 @@ class HistoryCard extends StatelessWidget {
           color: todo.status == 1 ? complete : incomplete,
           child: 
             ListTile(
+              onTap: () { 
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => HistoryPage(document: todo,)
+                ));
+              },
               contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               leading: Container(
                 padding: EdgeInsets.only(right: 12.0),

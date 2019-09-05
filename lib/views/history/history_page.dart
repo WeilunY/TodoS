@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:todo_nav/model/task.dart';
 import 'package:intl/intl.dart';
 
-class TaskPage extends StatelessWidget {
+class HistoryPage extends StatelessWidget {
 
-  TaskPage({@required this.document});
+  HistoryPage({@required this.document});
 
   Task document;
 

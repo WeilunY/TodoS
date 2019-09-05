@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -144,6 +146,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   var filepath;
+  var base64;
 
   Widget buildCamera(){
     return Card(
@@ -184,8 +187,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
         MaterialPageRoute(builder: (context) => CameraApp()));
 
         if(result != null){
-          setState(() {
+          setState(() async {
             filepath = result;
+            var imageBytes = await File(filepath).readAsBytesSync();
+            base64 = base64Encode(imageBytes);
           });
         }
       }
@@ -196,13 +201,17 @@ class _AddTaskPageState extends State<AddTaskPage> {
     if(filepath == null){
       return Container();
     }
-    return RaisedButton(
-      child: Icon(Icons.delete),
-      onPressed:() async { 
-        setState(() {
-          filepath = null;
-        });
-      }
+    return Container(
+      margin: EdgeInsets.only(left: 16.0),
+      child:  RaisedButton(
+        child: Icon(Icons.delete),
+        onPressed:() async { 
+          setState(() {
+            filepath = null;
+            base64 = null;
+          });
+        }
+      )
     );
   }
 
@@ -295,6 +304,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   "create_time": Timestamp.now(),
                   "status": 0,
                   "type": _type,
+                  "image": base64,
 
               }).catchError((err) => print(err));
               //.then((result) => {

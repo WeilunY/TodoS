@@ -95,7 +95,7 @@ class TaskCard extends StatelessWidget{
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) => TaskPage(document: document,)
                 ));
-                },
+              },
               contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
 
               leading: Container(
