@@ -225,7 +225,11 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver{
         setState(() {
           imagePath = filePath;
         });
-        if (filePath != null) showInSnackBar('Picture saved to $filePath');
+        if (filePath != null) {
+          showInSnackBar('Picture saved to $filePath');
+          Navigator.pop(context, filePath);
+        }
+
       }
     });
   }

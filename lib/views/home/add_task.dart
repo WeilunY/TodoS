@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todo_nav/style.dart';
 import './camera.dart';
+import 'dart:async';
+import 'dart:io';
 
 Map<int, String> values = {1: "Home", 2: "School", 3: "Work"};
 
@@ -141,23 +143,81 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 
+  var filepath;
+
   Widget buildCamera(){
     return Card(
       shape: inputRadius,
       color: colors[_type],
       elevation: 6.0,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
-        child: RaisedButton(
-          child: Icon(Icons.camera),
-          onPressed:() { 
-              Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => CameraApp())
-            );
-          }
-        )    
+        padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 14.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget> [ 
+
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 10.0, 0, 4.0),
+              child:  Text("Select Photo: ", style: textStyle,),
+            ),
+
+            preview(),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                photoButton(),
+                deletePhotoButton(),
+              ],
+            )    
+          ]    
+        )
       )
     );
+  }
+
+  Widget photoButton(){
+    return RaisedButton(
+      child: Icon(Icons.camera),
+      onPressed:() async { 
+        var result = await Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => CameraApp()));
+
+        if(result != null){
+          setState(() {
+            filepath = result;
+          });
+        }
+      }
+    );
+  }
+
+    Widget deletePhotoButton(){
+    if(filepath == null){
+      return Container();
+    }
+    return RaisedButton(
+      child: Icon(Icons.delete),
+      onPressed:() async { 
+        setState(() {
+          filepath = null;
+        });
+      }
+    );
+  }
+
+  Widget preview(){
+    if(filepath == null){
+      return Container(
+        child: Center(
+          child: Text("No Photo"),
+        )
+      );
+    }
+    else {
+      return  Image.file(File(filepath));
+                   
+    }
   }
   
   // Text editing
