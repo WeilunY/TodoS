@@ -16,7 +16,7 @@ class User {
     factory User.fromJson(DocumentSnapshot json) => new User(
         fname: json["fname"],
         surname: json["surname"],
-        uid: json["uid"],
+        uid: json.documentID,
         email: json["email"],
     );
 
