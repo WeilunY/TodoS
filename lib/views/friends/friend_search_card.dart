@@ -3,6 +3,7 @@ import '../../style.dart';
 import '../../model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import './friend_search.dart';
+import 'friend_detail.dart';
 //import 'package:flutter_slidable/flutter_slidable.dart';
 
 class FriendSearchCard extends StatefulWidget {
@@ -19,21 +20,6 @@ class FriendSearchCard extends StatefulWidget {
 class _FriendSearchCardState extends State<FriendSearchCard>{
 
   bool friend = false;
-
-  // @override
-  // void initState() async {
-  //   var snapShot = await Firestore.instance.collection("users").document(widget.uid).collection('friends').document(widget.user.uid).get();
-
-  //   if (snapShot != null || snapShot.exists) {
-  //     setState(() {
-  //       friend = true;
-  //     });
-  //   }
-
-    
-  //   super.initState();
-  // }
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +48,14 @@ class _FriendSearchCardState extends State<FriendSearchCard>{
         elevation: 8.0,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(14.0))),
         margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-        color: Colors.cyan,
+        color: strangerColor,
         child: 
           ListTile(
-
+            onTap: () {
+            Navigator.push( context, MaterialPageRoute(
+                builder: (context) => FriendDetails(user: widget.user, friend: false,) )
+              );
+          },
             contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             leading: Container(
               padding: EdgeInsets.only(right: 12.0),
@@ -90,10 +80,14 @@ class _FriendSearchCardState extends State<FriendSearchCard>{
       elevation: 8.0,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(14.0))),
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-      color: Colors.cyan[800],
+      color: friendColor,
       child: 
         ListTile(
-
+          onTap: () {
+            Navigator.push( context, MaterialPageRoute(
+                builder: (context) => FriendDetails(user: widget.user, friend: true,) )
+              );
+          },
           contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           leading: Container(
             padding: EdgeInsets.only(right: 12.0),

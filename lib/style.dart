@@ -17,3 +17,7 @@ final complete = Colors.cyan[900];
 final incomplete = Colors.cyan[200];
 
 final inputRadius = const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0)));
+
+final friendColor = Colors.teal[800];
+
+final strangerColor = Colors.teal;
